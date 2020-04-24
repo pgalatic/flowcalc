@@ -99,10 +99,16 @@ def estimate(idx, start_name, end_name, dst, method):
     # The absolute path accounts for if this file is being run as part of a submodule.
     root = pathlib.Path(__file__).parent.absolute()
     # Compute consistency check for backwards optical flow.
-    subprocess.run([
-        str('.' / root / CONSISTENCY_CHECK),
-        backward_name, forward_name, reliable_name, end_name
-    ])
+    successful = False
+    while not successful:
+        try:
+            subprocess.run([
+                str('.' / root / CONSISTENCY_CHECK),
+                backward_name, forward_name, reliable_name, end_name
+            ])
+            successful = True
+        except OSError:
+            pass
     
     # Remove forward optical flow to save space, as it is only needed for the consistency check.
     os.remove(forward_name)

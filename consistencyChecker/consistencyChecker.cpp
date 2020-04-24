@@ -149,7 +149,6 @@ int main(int argc, char** args) {
 
   // Check consistency of forward flow via backward flow and exclude motion boundaries
   CMatrix<float> reliable(xSize, ySize, 255.0f);
-  reliable.writeToPGM(args[3]);
   
   if (argc >= 5) {
     CMatrix<float> structure;
@@ -162,9 +161,6 @@ int main(int argc, char** args) {
     CMatrix<float> structure;
     checkConsistency(flow1, flow2, false, structure, reliable);
   }
-
-  //printf(args[3]);
-
   
   reliable.clip(0.0f, 255.0f);
  
