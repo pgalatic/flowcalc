@@ -2,6 +2,7 @@
 # STD LIB
 import os
 import pdb
+import logging
 import pathlib
 import subprocess
 
@@ -73,7 +74,13 @@ def deep_flow(start_name, end_name, forward_name, backward_name):
         str('.' / root / DEEPFLOW2), end_name, start_name, backward_name, '-match'
     ], stdin=backward_dm.stdout)
 
-def estimate(start_name, end_name, forward_name, backward_name, method):
+def estimate(idx, start_name, end_name, dst, method):
+    logging.info('Computing optical flow for job {}.'.format(idx))
+
+    forward_name = str(dst / 'forward_{}_{}.flo'.format(idx, idx+1))
+    backward_name = str(dst / 'backward_{}_{}.flo'.format(idx+1, idx))
+    reliable_name = str(dst / 'reliable_{}_{}.pgm'.format(idx+1, idx))
+
     if method == 'farneback':
         forward, backward = farneback_flow(start_name, end_name)
         # Write flows to disk so that they can be used in the consistency check.
